@@ -18,7 +18,7 @@ from extract_utils.main import (
 )
 
 namespace_imports = [
-    'device/motorola/sm7435-common',
+    'device/motorola/sm7450-common',
     'hardware/motorola',
     'hardware/qcom-caf/common/libqti-perfd-client',
     'hardware/qcom-caf/sm8450',
@@ -66,8 +66,8 @@ blob_fixups: blob_fixups_user_type = {
         .regex_replace('ro.boot.using_zram_from_fstab', 'ro.vendor.zram.swapon'),
     'vendor/etc/sensors/hals.conf': blob_fixup()
         .add_line_if_missing('sensors.moto_ext.so'),
-    ('vendor/etc/media_codecs_parrot_v0.xml', 'vendor/etc/media_codecs_parrot_v1.xml',
-        'vendor/etc/media_codecs_parrot_v2.xml', 'vendor/etc/media_codecs_ravelin.xml'): blob_fixup()
+    ('vendor/etc/media_codecs_diwali_v0.xml', 'vendor/etc/media_codecs_diwali_v1.xml',
+        'vendor/etc/media_codecs_diwali_v2.xml'): blob_fixup()
         .regex_replace('.*media_codecs_(google_audio|google_c2|google_telephony|google_video|vendor_audio|dolby_audio).*\n', ''),
     'vendor/etc/public.libraries.txt': blob_fixup()
         .regex_replace('libqti-perfd-client.so\n', ''),
@@ -87,7 +87,7 @@ blob_fixups: blob_fixups_user_type = {
 }  # fmt: skip
 
 module = ExtractUtilsModule(
-    'sm7435-common',
+    'sm7450-common',
     'motorola',
     blob_fixups=blob_fixups,
     lib_fixups=lib_fixups,
