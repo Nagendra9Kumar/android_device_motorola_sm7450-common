@@ -31,6 +31,10 @@ PRODUCT_PACKAGES += \
     checkpoint_gc \
     otapreopt_script
 
+# Disable Phantom Process Killer
+PRODUCT_SYSTEM_PROPERTIES += \
+    persist.sys.fflag.override.settings_enable_monitor_phantom_procs=false
+
 # Boot control
 PRODUCT_PACKAGES += \
     android.hardware.boot-service.qti \
@@ -272,6 +276,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     rfs_msm_mpss_readonly_vendor_fsg_symlink
 
+
 # Sensors
 PRODUCT_PACKAGES += \
     sensors.moto_ext \
@@ -293,6 +298,7 @@ PRODUCT_PACKAGES += \
     extphonelib.xml \
     extphonelib_product.xml \
     MotoNrEnabler \
+    MotoActions \
     ims-ext-common \
     ims_ext_common.xml \
     qti-telephony-hidl-wrapper \
