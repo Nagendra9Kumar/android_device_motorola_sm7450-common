@@ -69,125 +69,103 @@ BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := default
 
 # Kernel
 BOARD_BOOT_HEADER_VERSION := 4
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_CMDLINE += \
     firmware_class.path=/vendor/firmware_mnt/image \
-    androidboot.selinux=permissive \
     printk.devkmsg=on
 BOARD_BOOTCONFIG += \
     androidboot.hardware=qcom \
     androidboot.memcg=1 \
     androidboot.usbcontroller=a600000.dwc3
 
-# Inline Kernel Building (Commented out for future source building)
-# BOARD_KERNEL_IMAGE_NAME := Image
-# BOARD_KERNEL_PAGESIZE := 4096
-# BOARD_USES_GENERIC_KERNEL_IMAGE := true
-# TARGET_KERNEL_SOURCE := kernel/motorola/sm7450
-# TARGET_KERNEL_CONFIG := \
-#     gki_defconfig \
-#     vendor/waipio_GKI.config \
-#     vendor/ext_config/moto-waipio.config \
-#     vendor/ext_config/moto-waipio-gki.config
-# 
-# TARGET_KERNEL_EXT_MODULE_ROOT := kernel/motorola/sm7450-modules
-# 
-# # Kernel Modules
-# BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load))
-# BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(TARGET_KERNEL_SOURCE)/modules.vendor_blocklist.msm.waipio
-# BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load.vendor_boot))
-# BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE)
-# BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load.recovery))
-# BOOT_KERNEL_MODULES := $(BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD)
-# 
-# TARGET_KERNEL_EXT_MODULES := \
-#     qcom/opensource/mmrm-driver \
-#     qcom/opensource/audio-kernel \
-#     qcom/opensource/camera-kernel \
-#     qcom/opensource/cvp-kernel \
-#     qcom/opensource/dataipa/drivers/platform/msm \
-#     qcom/opensource/datarmnet/core \
-#     qcom/opensource/datarmnet-ext/aps \
-#     qcom/opensource/datarmnet-ext/offload \
-#     qcom/opensource/datarmnet-ext/shs \
-#     qcom/opensource/datarmnet-ext/perf \
-#     qcom/opensource/datarmnet-ext/perf_tether \
-#     qcom/opensource/datarmnet-ext/sch \
-#     qcom/opensource/datarmnet-ext/wlan \
-#     qcom/opensource/display-drivers/msm \
-#     qcom/opensource/eva-kernel \
-#     qcom/opensource/video-driver \
-#     qcom/opensource/wlan/qcacld-3.0/.adrastea \
-#     qcom/opensource/wlan/qcacld-3.0/.qca6750
-# 
-# TARGET_KERNEL_EXT_MODULES += \
-#     motorola/drivers/mmi_annotate \
-#     motorola/drivers/mmi_info \
-#     motorola/drivers/backlight/aw99703 \
-#     motorola/drivers/backlight/ktd3136 \
-#     motorola/drivers/power/bm_adsp_ulog \
-#     motorola/drivers/power/mmi_charger \
-#     motorola/drivers/power/qti_glink_charger \
-#     motorola/drivers/power/qpnp_adaptive_charge \
-#     motorola/drivers/power/bq27426_fg_mmi \
-#     motorola/drivers/power/sgm4154x_charger_lite \
-#     motorola/drivers/misc/utag \
-#     motorola/drivers/misc/mmi_stow \
-#     motorola/drivers/mmi_relay \
-#     motorola/drivers/misc/mmi_sys_temp \
-#     motorola/drivers/regulator/dio8015 \
-#     motorola/drivers/regulator/wl2864c \
-#     motorola/drivers/regulator/wl2866d \
-#     motorola/drivers/regulator/slg5bm43670 \
-#     motorola/drivers/sensors \
-#     motorola/drivers/misc/awinic/sarsensor \
-#     motorola/drivers/misc/stk501xx \
-#     motorola/drivers/misc/sx937x \
-#     motorola/drivers/input/touchscreen/touchscreen_mmi \
-#     motorola/drivers/input/touchscreen/focaltech_0flash_v2_mmi \
-#     motorola/drivers/input/touchscreen/ili9882_mmi \
-#     motorola/drivers/input/touchscreen/goodix_berlin_mmi \
-#     motorola/drivers/input/misc/anc_fps_mmi \
-#     motorola/drivers/input/misc/fpc_fps_mmi \
-#     motorola/drivers/input/misc/goodix_fod_mmi \
-#     motorola/drivers/moto_netopt/con_dfpar \
-#     motorola/drivers/nfc/st21nfc \
-#     motorola/drivers/wlan_antenna
-
-# Prebuilt Kernel Configs
+# Inline Kernel Building from Source
 BOARD_KERNEL_IMAGE_NAME := Image
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_KERNEL_SEPARATED_DTBO := true
+BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_RAMDISK_USE_LZ4 := true
 TARGET_KERNEL_NO_GCC := true
-TARGET_KERNEL_SOURCE := $(DEVICE_PATH)-kernel/kernel-headers
-BOARD_BOOT_HEADER_VERSION := 4
-BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
-
-# Prebuilt Kernel Modules
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(wildcard $(DEVICE_PATH)-kernel/vendor_ramdisk/*.ko)
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(patsubst %,$(DEVICE_PATH)-kernel/vendor_ramdisk/%,$(shell cat $(DEVICE_PATH)-kernel/vendor_ramdisk/modules.load))
-BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD  := $(patsubst %,$(DEVICE_PATH)-kernel/vendor_ramdisk/%,$(shell cat $(DEVICE_PATH)-kernel/vendor_ramdisk/modules.load.recovery))
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(DEVICE_PATH)-kernel/vendor_ramdisk/modules.blocklist
-BOARD_VENDOR_KERNEL_MODULES := $(wildcard $(DEVICE_PATH)-kernel/vendor_dlkm/*.ko)
-BOARD_VENDOR_KERNEL_MODULES_LOAD := $(patsubst %,$(DEVICE_PATH)-kernel/vendor_dlkm/%,$(shell cat $(DEVICE_PATH)-kernel/vendor_dlkm/modules.load))
-BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(DEVICE_PATH)-kernel/vendor_dlkm/modules.blocklist
-
-# Prebuilt Kernel
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_NO_KERNEL_OVERRIDE := true
-TARGET_NO_KERNEL := false
-BOARD_KERNEL_BINARIES := kernel
 TARGET_KERNEL_VERSION := 5.10
+TARGET_KERNEL_SOURCE := kernel/motorola/sm7450
+TARGET_KERNEL_CONFIG := \
+    gki_defconfig \
+    vendor/waipio_GKI.config \
+    vendor/ext_config/moto-waipio.config \
+    vendor/ext_config/moto-waipio-gki.config
 
-# Paths to Prebuilt Images
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)-kernel/kernel
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)-kernel/dtb.img
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)-kernel/dtbo.img
+# Clang toolchain and LTO settings for kernel
+KERNEL_LTO := none
+TARGET_KERNEL_ADDITIONAL_FLAGS := \
+    KCFLAGS="-I$(abspath $(TARGET_KERNEL_EXT_MODULE_ROOT)/motorola/include) -DPOWER_SUPPLY_TYPE_USB_HVDCP_3=21 -DPOWER_SUPPLY_TYPE_USB_HVDCP_3P5=22 -DPOWER_SUPPLY_TYPE_USB_FLOAT=23 -DPOWER_SUPPLY_TYPE_USB_HVDCP=20 -DPSY_IIO_MMI_OTG_ENABLE=116 -DPSY_IIO_USB_CHARGING_ENABLED=117 -DPSY_IIO_INPUT_CURRENT_SETTLED=118 -DPSY_IIO_USB_TERMINATION_ENABLED=119 -DPSY_IIO_MMI_QC3P_POWER=120 -DPSY_IIO_MMI_PD_VDM_VERIFY=121 -DPSY_IIO_MMI_CP_INPUT_CURRENT_NOW=122 -DPSY_IIO_MMI_CP_INPUT_VOLTAGE_NOW=123 -DPSY_IIO_CP_CLEAR_ERROR=124 -DPSY_IIO_MMI_CP_CHIP_ID=125 -Wno-error"
 
-PRODUCT_COPY_FILES += \
-    $(DEVICE_PATH)-kernel/dtb.img:$(TARGET_COPY_OUT)/dtb.img \
-    $(DEVICE_PATH)-kernel/kernel:kernel
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/motorola/sm7450-modules
+
+# Kernel Modules
+BOARD_KERNEL_MODULES_LOAD_ALLOW_MISSING := true
+TARGET_AUTO_COLLECT_KERNEL_MODULE_DEPS := true
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load))
+BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE := $(TARGET_KERNEL_SOURCE)/modules.vendor_blocklist.msm.waipio
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load.vendor_boot))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_BLOCKLIST_FILE := $(BOARD_VENDOR_KERNEL_MODULES_BLOCKLIST_FILE)
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(COMMON_PATH)/modules.load.recovery))
+BOOT_KERNEL_MODULES := $(BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD)
+
+TARGET_KERNEL_EXT_MODULES := \
+    qcom/opensource/mmrm-driver \
+    qcom/opensource/audio-kernel \
+    qcom/opensource/camera-kernel \
+    qcom/opensource/cvp-kernel \
+    qcom/opensource/dataipa/drivers/platform/msm \
+    qcom/opensource/datarmnet/core \
+    qcom/opensource/datarmnet-ext/aps \
+    qcom/opensource/datarmnet-ext/offload \
+    qcom/opensource/datarmnet-ext/shs \
+    qcom/opensource/datarmnet-ext/perf \
+    qcom/opensource/datarmnet-ext/perf_tether \
+    qcom/opensource/datarmnet-ext/sch \
+    qcom/opensource/datarmnet-ext/wlan \
+    qcom/opensource/display-drivers/msm \
+    qcom/opensource/eva-kernel \
+    qcom/opensource/video-driver \
+    qcom/opensource/wlan/qcacld-3.0/.adrastea \
+    qcom/opensource/wlan/qcacld-3.0/.qca6750
+
+TARGET_KERNEL_EXT_MODULES += \
+    motorola/drivers/mmi_annotate \
+    motorola/drivers/mmi_info \
+    motorola/drivers/backlight/aw99703 \
+    motorola/drivers/backlight/ktd3136 \
+    motorola/drivers/power/bm_adsp_ulog \
+    motorola/drivers/power/mmi_charger \
+    motorola/drivers/power/qti_glink_charger \
+    motorola/drivers/power/qpnp_adaptive_charge \
+    motorola/drivers/power/bq27426_fg_mmi \
+    motorola/drivers/power/sgm4154x_charger_lite \
+    motorola/drivers/misc/utag \
+    motorola/drivers/misc/mmi_stow \
+    motorola/drivers/misc/mmi_sys_temp \
+    motorola/drivers/regulator/dio8015 \
+    motorola/drivers/regulator/dio8018 \
+    motorola/drivers/regulator/wl2864c \
+    motorola/drivers/regulator/wl2866d \
+    motorola/drivers/regulator/slg5bm43670 \
+    motorola/drivers/sensors \
+    motorola/drivers/misc/awinic/sarsensor \
+    motorola/drivers/misc/stk501xx \
+    motorola/drivers/misc/sx937x \
+    motorola/drivers/mmi_relay \
+    motorola/drivers/input/touchscreen/touchscreen_mmi \
+    motorola/drivers/input/touchscreen/focaltech_0flash_v2_mmi \
+    motorola/drivers/input/touchscreen/ili9882_mmi \
+    motorola/drivers/input/touchscreen/goodix_berlin_mmi \
+    motorola/drivers/input/misc/anc_fps_mmi \
+    motorola/drivers/input/misc/fpc_fps_mmi \
+    motorola/drivers/input/misc/goodix_fod_mmi \
+    motorola/drivers/moto_netopt/con_dfpar \
+    motorola/drivers/nfc/st21nfc \
+    motorola/drivers/wlan_antenna
+
 
 # Metadata
 BOARD_USES_METADATA_PARTITION := true
@@ -278,6 +256,19 @@ WIFI_HIDL_FEATURE_AWARE := true
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X
+
+# Charging Control & Bypass Charging
+TARGET_HEALTH_CHARGING_CONTROL_CHARGING_PATH := /sys/class/power_supply/battery/charging_enabled
+TARGET_HEALTH_CHARGING_CONTROL_CHARGING_ENABLED := 1
+TARGET_HEALTH_CHARGING_CONTROL_CHARGING_DISABLED := 0
+TARGET_HEALTH_CHARGING_CONTROL_SUPPORTS_BYPASS := true
+TARGET_HEALTH_CHARGING_CONTROL_SUPPORTS_TOGGLE := true
+
+# Power-Off Alarm
+TARGET_PROVIDES_POWER_OFF_ALARM := true
+
+# Qualcomm IPA Hardware Acceleration
+TARGET_USES_QCOM_IPA := true
 
 # inherit from the proprietary version
 include vendor/motorola/sm7450-common/BoardConfigVendor.mk
